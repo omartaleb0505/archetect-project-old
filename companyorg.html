@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedLab Solutions - Laboratory Equipment &amp; Reagents Supplier</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    html { scroll-behavior: smooth; }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .animate-fade-in-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 1s ease-out forwards;
+    }
+    
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    
+    .product-card {
+      transition: all 0.3s ease;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(10, 46, 92, 0.15);
+    }
+    
+    .nav-link {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #2B7A9B;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #0A2E5C 0%, #1a4a7c 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(10, 46, 92, 0.3);
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, rgba(10, 46, 92, 0.95) 0%, rgba(10, 46, 92, 0.85) 100%);
+    }
+    
+    .section-fade {
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+    
+    .stock-bar {
+      height: 6px;
+      background: #E5E7EB;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    
+    .stock-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2B7A9B 0%, #0A2E5C 100%);
+      transition: width 0.3s ease;
+    }
+    
+    .page-content {
+      display: none;
+      animation: fadeIn 0.5s ease-out forwards;
+      min-height: 100vh;
+    }
+    
+    .page-content.active {
+      display: block;
+    }
+    
+    .stock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .badge-in-stock {
+      background: #D1FAE5;
+      color: #047857;
+    }
+    
+    .badge-limited {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+    
+    .badge-on-order {
+      background: #DBEAFE;
+      color: #1E40AF;
+    }
+    
+    .floating-btn {
+      position: fixed;
+      z-index: 40;
+      transition: all 0.3s ease;
+    }
+    
+    .floating-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'medical-blue': '#0A2E5C',
+            'medical-blue-light': '#1a4a7c',
+            'medical-teal': '#2B7A9B',
+            'medical-gray': '#6B7280',
+            'medical-light': '#F8FAFC',
+            'medical-border': '#E5E7EB'
+          }
+        }
+      }
+    }
+  </script>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-white text-gray-800">
+  <div id="app-wrapper" class="w-full h-full overflow-auto">
+   <!-- Navigation -->
+   <nav id="main-nav" class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md z-50 border-b border-medical-border">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+     <div class="flex items-center justify-between h-20">
+      <a onclick="showPage('home')" class="flex items-center gap-3 cursor-pointer">
+       <div class="w-10 h-10 bg-medical-blue rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+        </svg>
+       </div><span id="nav-company-name" class="text-xl font-semibold text-medical-blue">MedLab Solutions</span> </a>
+      <div class="hidden lg:flex items-center gap-6">
+       <a onclick="showPage('home')" class="nav-link text-gray-600 hover:text-medical-blue font-medium cursor-pointer text-sm">Home</a> <a onclick="showPage('products')" class="nav-link text-gray-600 hover:text-medical-blue font-medium cursor-pointer text-sm">Products</a> <a onclick="showPage('inventory')" class="nav-link text-gray-600 hover:text-medical-blue font-medium cursor-pointer text-sm">Inventory</a> <a onclick="showPage('quote')" class="nav-link text-gray-600 hover:text-medical-blue font-medium cursor-pointer text-sm">Quote Request</a> <a onclick="showPage('partnership')" class="nav-link text-gray-600 hover:text-medical-blue font-medium cursor-pointer text-sm">Partnership</a> <a onclick="showPage('contact')" class="nav-link text-gray-600 hover:text-medical-blue font-medium cursor-pointer text-sm">Contact</a>
+      </div>
+      <div class="flex items-center gap-2 bg-medical-light rounded-lg p-1"><button onclick="switchLanguage('en')" id="lang-en-btn" class="px-3 py-1 rounded text-sm font-medium bg-white text-medical-blue border border-medical-border transition-all">EN</button> <button onclick="switchLanguage('fr')" id="lang-fr-btn" class="px-3 py-1 rounded text-sm font-medium text-gray-600 hover:text-medical-blue transition-all">FR</button>
+      </div><button id="mobile-menu-btn" class="lg:hidden p-2 text-gray-600">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+       </svg></button>
+     </div>
+    </div>
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-medical-border">
+     <div class="px-6 py-4 space-y-3">
+      <a onclick="showPage('home'); document.getElementById('mobile-menu').classList.add('hidden')" class="block py-2 text-gray-600 hover:text-medical-blue font-medium cursor-pointer">Home</a> <a onclick="showPage('products'); document.getElementById('mobile-menu').classList.add('hidden')" class="block py-2 text-gray-600 hover:text-medical-blue font-medium cursor-pointer">Products</a> <a onclick="showPage('inventory'); document.getElementById('mobile-menu').classList.add('hidden')" class="block py-2 text-gray-600 hover:text-medical-blue font-medium cursor-pointer">Inventory</a> <a onclick="showPage('quote'); document.getElementById('mobile-menu').classList.add('hidden')" class="block py-2 text-gray-600 hover:text-medical-blue font-medium cursor-pointer">Quote Request</a> <a onclick="showPage('partnership'); document.getElementById('mobile-menu').classList.add('hidden')" class="block py-2 text-gray-600 hover:text-medical-blue font-medium cursor-pointer">Partnership</a> <a onclick="showPage('contact'); document.getElementById('mobile-menu').classList.add('hidden')" class="block py-2 text-gray-600 hover:text-medical-blue font-medium cursor-pointer">Contact</a>
+     </div>
+    </div>
+   </nav><!-- HOME PAGE -->
+   <div id="home-page" class="page-content active">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20">
+     <div class="absolute inset-0 hero-gradient"></div>
+     <div class="absolute inset-0 opacity-10">
+      <svg class="w-full h-full" viewbox="0 0 100 100" preserveaspectratio="none"><defs>
+        <pattern id="grid" width="10" height="10" patternunits="userSpaceOnUse">
+         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" />
+        </pattern>
+       </defs> <rect width="100" height="100" fill="url(#grid)" />
+      </svg>
+     </div>
+     <div class="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+       <div class="animate-fade-in-up">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full mb-6">
+         <div class="w-2 h-2 bg-medical-teal rounded-full animate-pulse"></div><span class="text-white/90 text-sm font-medium">Trusted by 200+ Laboratories</span>
+        </div>
+        <h1 id="hero-headline" class="text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6">Advanced Laboratory Equipment &amp; Diagnostic Solutions</h1>
+        <p id="hero-subtext" class="text-lg text-white/80 mb-8 max-w-xl leading-relaxed">Reliable medical laboratory systems, high-quality reagents, and comprehensive support for hospitals, clinics, and private laboratories across the region.</p>
+        <div class="flex flex-wrap gap-4"><a onclick="showPage('quote')" class="bg-white text-medical-blue px-8 py-4 rounded-lg font-semibold hover:bg-medical-light transition-all hover:shadow-lg cursor-pointer">Request a Quote</a> <a onclick="showPage('products')" class="border-2 border-white/30 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-all cursor-pointer">Our Products</a>
+        </div>
+       </div>
+       <div class="animate-fade-in delay-300 hidden lg:block">
+        <div class="relative">
+         <div class="absolute -inset-4 bg-gradient-to-r from-medical-teal/20 to-transparent rounded-3xl blur-2xl"></div>
+         <div class="relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+          <svg class="w-full h-64" viewbox="0 0 400 250" fill="none">
+           <rect x="50" y="60" width="300" height="150" rx="8" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.3" /> <rect x="70" y="80" width="120" height="80" rx="4" fill="#2B7A9B" fill-opacity="0.3" stroke="white" stroke-opacity="0.5" /> <rect x="80" y="90" width="100" height="60" rx="2" fill="white" fill-opacity="0.2" /> <circle cx="130" cy="120" r="20" fill="#2B7A9B" fill-opacity="0.5" stroke="white" /> <rect x="210" y="80" width="120" height="30" rx="4" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.3" /> <rect x="220" y="88" width="30" height="14" rx="2" fill="#2B7A9B" /> <rect x="260" y="88" width="30" height="14" rx="2" fill="white" fill-opacity="0.3" /> <rect x="210" y="120" width="120" height="50" rx="4" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.3" /> <rect x="220" y="130" width="100" height="8" rx="1" fill="white" fill-opacity="0.5" /> <rect x="220" y="145" width="80" height="8" rx="1" fill="white" fill-opacity="0.3" />
+          </svg>
+          <div class="mt-4 text-center"><span class="text-white/60 text-sm">Next-Gen Diagnostic Systems</span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Why Choose Us -->
+    <section class="py-24 bg-white">
+     <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16 section-fade"><span class="text-medical-teal font-semibold text-sm uppercase tracking-wider">Our Advantages</span>
+       <h2 class="text-3xl lg:text-4xl font-bold text-medical-blue mt-3 mb-4">Why Laboratories Trust Us</h2>
+       <p class="text-gray-600 max-w-2xl mx-auto">Committed to excellence in laboratory solutions and long-term partnership.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+       <div class="text-center section-fade">
+        <div class="w-16 h-16 bg-medical-light rounded-2xl flex items-center justify-center mx-auto mb-6 border border-medical-border">
+         <svg class="w-8 h-8 text-medical-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+         </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-medical-blue mb-2">Certified Suppliers</h3>
+        <p class="text-gray-600 text-sm">Authorized partnerships with globally recognized medical equipment manufacturers.</p>
+       </div>
+       <div class="text-center section-fade delay-100">
+        <div class="w-16 h-16 bg-medical-light rounded-2xl flex items-center justify-center mx-auto mb-6 border border-medical-border">
+         <svg class="w-8 h-8 text-medical-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+         </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-medical-blue mb-2">Continuous Supply</h3>
+        <p class="text-gray-600 text-sm">Uninterrupted reagent delivery with real-time inventory management.</p>
+       </div>
+       <div class="text-center section-fade delay-200">
+        <div class="w-16 h-16 bg-medical-light rounded-2xl flex items-center justify-center mx-auto mb-6 border border-medical-border">
+         <svg class="w-8 h-8 text-medical-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+         </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-medical-blue mb-2">24/7 Support</h3>
+        <p class="text-gray-600 text-sm">Fast technical response and emergency restocking services.</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- CTA -->
+    <section class="py-20 bg-medical-blue relative overflow-hidden">
+     <div class="absolute inset-0 opacity-10">
+      <svg class="w-full h-full" viewbox="0 0 100 100" preserveaspectratio="none"><defs>
+        <pattern id="cta-grid" width="20" height="20" patternunits="userSpaceOnUse">
+         <circle cx="10" cy="10" r="1" fill="white" />
+        </pattern>
+       </defs> <rect width="100" height="100" fill="url(#cta-grid)" />
+      </svg>
+     </div>
+     <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">Ready to Upgrade Your Laboratory?</h2>
+      <p class="text-white/80 text-lg mb-8 max-w-2xl mx-auto">Check our real-time inventory and request a customized quote today.</p><a onclick="showPage('inventory')" class="inline-flex items-center gap-2 bg-white text-medical-blue px-8 py-4 rounded-lg font-semibold hover:bg-medical-light transition-all hover:shadow-lg cursor-pointer">View Inventory 
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+       </svg></a>
+     </div>
+    </section>
+   </div><!-- PRODUCTS PAGE -->
+   <div id="products-page" class="page-content">
+    <section class="min-h-screen pt-32 pb-24 bg-white">
+     <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="mb-16 section-fade">
+       <h1 class="text-4xl lg:text-5xl font-bold text-medical-blue mb-4">Laboratory Systems &amp; Reagents</h1>
+       <p class="text-xl text-gray-600">Complete range of diagnostic equipment and consumables from world-leading manufacturers.</p>
+      </div><!-- Laboratory Systems -->
+      <div class="mb-20">
+       <h2 id="machine-category-title" class="text-3xl font-bold text-medical-blue mb-12">Laboratory Systems</h2>
+       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><rect x="15" y="25" width="70" height="55" rx="4" stroke-width="2" /> <rect x="25" y="35" width="25" height="20" rx="2" stroke-width="1.5" fill="currentColor" fill-opacity="0.1" /> <circle cx="37.5" cy="45" r="6" stroke-width="1.5" /> <rect x="58" y="35" width="20" height="6" rx="1" stroke-width="1.5" /> <rect x="58" y="45" width="20" height="6" rx="1" stroke-width="1.5" /> <circle cx="25" cy="70" r="3" fill="currentColor" /> <circle cx="35" cy="70" r="3" fill="currentColor" fill-opacity="0.5" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Hematology Analyzer</h3><span class="stock-badge badge-in-stock">🟢 In Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Complete blood count systems with 3-part and 5-part differential capabilities.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• Throughput: 60 samples/hour</p>
+           <p>• 5 Units Available</p>
+           <p>• Fully automated operation</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 80%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">80% Inventory</p>
+          <div class="flex gap-3 mt-6">
+           <button onclick="showPage('quote')" class="flex-1 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Quote</button> <button onclick="openProductDetails('hematology')" class="flex-1 py-2 bg-medical-teal text-white rounded-lg font-medium hover:bg-medical-blue transition-colors text-sm cursor-pointer">Details</button>
+          </div>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-100">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><rect x="10" y="30" width="80" height="50" rx="4" stroke-width="2" /> <rect x="18" y="38" width="35" height="25" rx="2" stroke-width="1.5" /> <path d="M23 55 L28 48 L33 52 L38 45 L43 50 L48 43" stroke-width="1.5" stroke-linecap="round" /> <rect x="60" y="38" width="24" height="8" rx="1" stroke-width="1.5" /> <rect x="60" y="50" width="18" height="8" rx="1" stroke-width="1.5" /> <rect x="30" y="68" width="40" height="6" rx="1" stroke-width="1.5" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Biochemistry Analyzer</h3><span class="stock-badge badge-limited">🟡 Limited Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Fully automated clinical chemistry analyzer for metabolic panels.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• Throughput: 400 tests/hour</p>
+           <p>• 3 Units Available</p>
+           <p>• Multi-wavelength detection</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 50%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">50% Inventory</p>
+          <div class="flex gap-3 mt-6">
+           <button onclick="showPage('quote')" class="flex-1 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Quote</button> <button onclick="openProductDetails('hematology')" class="flex-1 py-2 bg-medical-teal text-white rounded-lg font-medium hover:bg-medical-blue transition-colors text-sm cursor-pointer">Details</button>
+          </div>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-200">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><rect x="20" y="20" width="60" height="65" rx="4" stroke-width="2" /> <circle cx="50" cy="45" r="15" stroke-width="2" /> <circle cx="50" cy="45" r="8" stroke-width="1.5" fill="currentColor" fill-opacity="0.1" /> <circle cx="50" cy="45" r="3" fill="currentColor" /> <rect x="30" y="68" width="40" height="8" rx="2" stroke-width="1.5" /> <circle cx="35" cy="30" r="2" fill="currentColor" /> <circle cx="42" cy="30" r="2" fill="currentColor" fill-opacity="0.5" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Immunology System</h3><span class="stock-badge badge-on-order">🔵 Available on Order</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Advanced immunoassay platform for hormone and marker testing.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• 50 tests/hour capacity</p>
+           <p>• Arriving March 15</p>
+           <p>• Full automation included</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 30%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">30% Inventory</p>
+          <div class="flex gap-3 mt-6">
+           <button onclick="showPage('quote')" class="flex-1 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Quote</button> <button onclick="openProductDetails('hematology')" class="flex-1 py-2 bg-medical-teal text-white rounded-lg font-medium hover:bg-medical-blue transition-colors text-sm cursor-pointer">Details</button>
+          </div>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-300">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><circle cx="50" cy="35" r="18" stroke-width="2" /> <rect x="35" y="58" width="30" height="20" rx="3" stroke-width="2" /> <rect x="40" y="65" width="8" height="8" rx="1" fill="currentColor" fill-opacity="0.3" /> <rect x="52" y="65" width="8" height="8" rx="1" fill="currentColor" fill-opacity="0.3" /> <circle cx="50" cy="35" r="8" stroke-width="1.5" fill="currentColor" fill-opacity="0.2" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">PCR System</h3><span class="stock-badge badge-in-stock">🟢 In Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Real-time PCR system for molecular diagnostics and research.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• 96-well plate format</p>
+           <p>• 2 Units Available</p>
+           <p>• Advanced temperature control</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 70%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">70% Inventory</p>
+          <div class="flex gap-3 mt-6">
+           <button onclick="showPage('quote')" class="flex-1 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Quote</button> <button onclick="openProductDetails('hematology')" class="flex-1 py-2 bg-medical-teal text-white rounded-lg font-medium hover:bg-medical-blue transition-colors text-sm cursor-pointer">Details</button>
+          </div>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-100">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><rect x="20" y="35" width="60" height="45" rx="3" stroke-width="2" /> <line x1="30" y1="48" x2="70" y2="48" stroke-width="1.5" /> <line x1="30" y1="58" x2="70" y2="58" stroke-width="1.5" /> <line x1="30" y1="68" x2="70" y2="68" stroke-width="1.5" /> <rect x="25" y="25" width="50" height="8" rx="2" stroke-width="2" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Electrolyte Analyzer</h3><span class="stock-badge badge-limited">🟡 Limited Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Ion-selective electrode system for electrolyte measurement.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• 120 samples/hour</p>
+           <p>• 2 Units Available</p>
+           <p>• Direct ISE technology</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 45%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">45% Inventory</p>
+          <div class="flex gap-3 mt-6">
+           <button onclick="showPage('quote')" class="flex-1 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Quote</button> <button onclick="openProductDetails('hematology')" class="flex-1 py-2 bg-medical-teal text-white rounded-lg font-medium hover:bg-medical-blue transition-colors text-sm cursor-pointer">Details</button>
+          </div>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-200">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><rect x="15" y="15" width="70" height="70" rx="4" stroke-width="2" /> <circle cx="50" cy="50" r="12" stroke-width="2" /> <circle cx="50" cy="50" r="6" stroke-width="1.5" fill="currentColor" fill-opacity="0.2" /> <line x1="50" y1="25" x2="50" y2="35" stroke-width="1.5" /> <line x1="75" y1="50" x2="65" y2="50" stroke-width="1.5" /> <line x1="50" y1="75" x2="50" y2="65" stroke-width="1.5" /> <line x1="25" y1="50" x2="35" y2="50" stroke-width="1.5" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Blood Gas Analyzer</h3><span class="stock-badge badge-in-stock">🟢 In Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Point-of-care blood gas and electrolyte analysis system.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• Results in 40 seconds</p>
+           <p>• 4 Units Available</p>
+           <p>• Portable and reliable</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 85%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">85% Inventory</p>
+          <div class="flex gap-3 mt-6">
+           <button onclick="showPage('quote')" class="flex-1 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Quote</button> <button onclick="openProductDetails('hematology')" class="flex-1 py-2 bg-medical-teal text-white rounded-lg font-medium hover:bg-medical-blue transition-colors text-sm cursor-pointer">Details</button>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Reagents & Consumables -->
+      <div>
+       <h2 id="reagent-category-title" class="text-3xl font-bold text-medical-blue mb-12">Reagents &amp; Consumables</h2>
+       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><rect x="25" y="15" width="16" height="35" rx="3" stroke-width="2" /> <rect x="25" y="35" width="16" height="12" fill="currentColor" fill-opacity="0.2" /> <rect x="45" y="20" width="12" height="30" rx="2" stroke-width="2" /> <rect x="45" y="35" width="12" height="12" fill="currentColor" fill-opacity="0.3" /> <rect x="62" y="18" width="14" height="32" rx="2" stroke-width="2" /> <rect x="62" y="32" width="14" height="15" fill="currentColor" fill-opacity="0.15" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Hematology Reagents</h3><span class="stock-badge badge-in-stock">🟢 In Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Complete blood count control and calibration reagents.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• Compatible with major analyzers</p>
+           <p>• 250 Kits Available</p>
+           <p>• 6-month stability</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 90%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">90% Inventory</p><button onclick="showPage('quote')" class="w-full mt-6 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Request Supply</button>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-100">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><path d="M30 20 L50 30 L70 20 L70 70 Q50 80 30 70 Z" stroke-width="2" fill="currentColor" fill-opacity="0.1" /> <line x1="40" y1="35" x2="60" y2="35" stroke-width="1.5" /> <line x1="40" y1="48" x2="60" y2="48" stroke-width="1.5" /> <line x1="40" y1="61" x2="60" y2="61" stroke-width="1.5" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Chemistry Reagents</h3><span class="stock-badge badge-limited">🟡 Limited Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Comprehensive clinical chemistry reagent kits.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• 500+ parameter methods</p>
+           <p>• 180 Kits Available</p>
+           <p>• 12-month shelf life</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 55%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">55% Inventory</p><button onclick="showPage('quote')" class="w-full mt-6 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Request Supply</button>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-200">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><circle cx="50" cy="40" r="16" stroke-width="2" fill="currentColor" fill-opacity="0.1" /> <circle cx="50" cy="40" r="8" stroke-width="1.5" fill="currentColor" fill-opacity="0.2" /> <rect x="35" y="65" width="30" height="20" rx="2" stroke-width="2" /> <line x1="40" y1="73" x2="60" y2="73" stroke-width="1.5" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Immunology Kits</h3><span class="stock-badge badge-in-stock">🟢 In Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Immunoassay kits for hormone and tumor markers.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• 96-well microplate format</p>
+           <p>• 320 Kits Available</p>
+           <p>• Temperature stable</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 88%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">88% Inventory</p><button onclick="showPage('quote')" class="w-full mt-6 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Request Supply</button>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-300">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><rect x="20" y="25" width="60" height="50" rx="3" stroke-width="2" /> <circle cx="50" cy="50" r="10" stroke-width="1.5" fill="currentColor" fill-opacity="0.2" /> <line x1="30" y1="20" x2="30" y2="15" stroke-width="2" stroke-linecap="round" /> <line x1="50" y1="20" x2="50" y2="15" stroke-width="2" stroke-linecap="round" /> <line x1="70" y1="20" x2="70" y2="15" stroke-width="2" stroke-linecap="round" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Control Materials</h3><span class="stock-badge badge-on-order">🔵 Available on Order</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">QC control sera and materials for analyzer calibration.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• Multiple quality levels</p>
+           <p>• 100 Kits Available</p>
+           <p>• Arriving March 20</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 35%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">35% Inventory</p><button onclick="showPage('quote')" class="w-full mt-6 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Request Supply</button>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-100">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><path d="M50 20 L60 30 L60 75 Q50 82 40 75 L40 30 Z" stroke-width="2" fill="currentColor" fill-opacity="0.1" /> <line x1="42" y1="40" x2="58" y2="40" stroke-width="1.5" /> <line x1="42" y1="50" x2="58" y2="50" stroke-width="1.5" /> <line x1="42" y1="60" x2="58" y2="60" stroke-width="1.5" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">PCR Test Kits</h3><span class="stock-badge badge-in-stock">🟢 In Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Molecular diagnostic PCR kits for infectious disease detection.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• Ready-to-use format</p>
+           <p>• 500 Kits Available</p>
+           <p>• CE-IVD certified</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 92%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">92% Inventory</p><button onclick="showPage('quote')" class="w-full mt-6 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Request Supply</button>
+         </div>
+        </div>
+        <div class="product-card bg-medical-light rounded-xl overflow-hidden border border-medical-border section-fade delay-200">
+         <div class="h-48 bg-gradient-to-br from-medical-blue/5 to-medical-teal/5 flex items-center justify-center p-6">
+          <svg class="w-24 h-24 text-medical-blue" viewbox="0 0 100 100" fill="none" stroke="currentColor"><rect x="30" y="20" width="40" height="50" rx="2" stroke-width="2" fill="currentColor" fill-opacity="0.1" /> <line x1="35" y1="30" x2="65" y2="30" stroke-width="1.5" /> <line x1="35" y1="40" x2="65" y2="40" stroke-width="1.5" /> <line x1="35" y1="50" x2="65" y2="50" stroke-width="1.5" /> <line x1="35" y1="60" x2="65" y2="60" stroke-width="1.5" /> <circle cx="50" cy="75" r="8" stroke-width="1.5" />
+          </svg>
+         </div>
+         <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-semibold text-medical-blue">Sample Collection Tubes</h3><span class="stock-badge badge-in-stock">🟢 In Stock</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">Pre-sterile blood collection tubes with various additives.</p>
+          <div class="space-y-2 mb-4 text-sm text-gray-600">
+           <p>• Serum, EDTA, and plasma tubes</p>
+           <p>• 5000 Units Available</p>
+           <p>• Sterile and pyrogen-free</p>
+          </div>
+          <div class="stock-bar">
+           <div class="stock-bar-fill" style="width: 95%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">95% Inventory</p><button onclick="showPage('quote')" class="w-full mt-6 py-2 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer text-sm">Request Supply</button>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section>
+   </div><!-- INVENTORY PAGE -->
+   <div id="inventory-page" class="page-content">
+    <section class="min-h-screen pt-32 pb-24 bg-white">
+     <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="mb-12 section-fade">
+       <h1 class="text-4xl lg:text-5xl font-bold text-medical-blue mb-4">Real-Time Inventory &amp; Availability</h1>
+       <p class="text-xl text-gray-600">Check availability of laboratory systems and reagents.</p>
+      </div><!-- Filters -->
+      <div class="bg-medical-light rounded-xl border border-medical-border p-6 mb-12 section-fade delay-100">
+       <h3 class="text-lg font-semibold text-medical-blue mb-4">Filter Results</h3>
+       <div class="grid md:grid-cols-4 gap-4">
+        <div>
+         <label class="block text-sm font-medium text-gray-700 mb-2">Category</label> <select class="w-full px-4 py-2 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal bg-white"> <option>All Categories</option> <option>Laboratory Systems</option> <option>Reagents &amp; Consumables</option> </select>
+        </div>
+        <div>
+         <label class="block text-sm font-medium text-gray-700 mb-2">Stock Status</label> <select class="w-full px-4 py-2 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal bg-white"> <option>All Status</option> <option>In Stock</option> <option>Limited Stock</option> <option>Available on Order</option> </select>
+        </div>
+        <div>
+         <label class="block text-sm font-medium text-gray-700 mb-2">Type</label> <select class="w-full px-4 py-2 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal bg-white"> <option>All Types</option> <option>Machines Only</option> <option>Reagents Only</option> </select>
+        </div>
+        <div class="flex items-end">
+         <button class="w-full btn-primary text-white py-2 rounded-lg font-medium">Apply Filters</button>
+        </div>
+       </div>
+      </div><!-- Inventory Table -->
+      <div class="bg-white rounded-xl border border-medical-border overflow-hidden section-fade delay-200">
+       <div class="overflow-x-auto">
+        <table class="w-full">
+         <thead class="bg-medical-light border-b border-medical-border">
+          <tr>
+           <th class="px-6 py-4 text-left text-sm font-semibold text-medical-blue">Product</th>
+           <th class="px-6 py-4 text-left text-sm font-semibold text-medical-blue">Category</th>
+           <th class="px-6 py-4 text-left text-sm font-semibold text-medical-blue">Stock Status</th>
+           <th class="px-6 py-4 text-left text-sm font-semibold text-medical-blue">Available</th>
+           <th class="px-6 py-4 text-left text-sm font-semibold text-medical-blue">Inventory Level</th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr class="border-b border-medical-border hover:bg-medical-light transition-colors">
+           <td class="px-6 py-4 font-medium text-gray-800">Hematology Analyzer</td>
+           <td class="px-6 py-4 text-gray-600">Laboratory Systems</td>
+           <td class="px-6 py-4"><span class="stock-badge badge-in-stock">🟢 In Stock</span></td>
+           <td class="px-6 py-4 text-gray-600">5 Units</td>
+           <td class="px-6 py-4">
+            <div class="w-32 stock-bar">
+             <div class="stock-bar-fill" style="width: 80%"></div>
+            </div></td>
+          </tr>
+          <tr class="border-b border-medical-border hover:bg-medical-light transition-colors">
+           <td class="px-6 py-4 font-medium text-gray-800">Biochemistry Analyzer</td>
+           <td class="px-6 py-4 text-gray-600">Laboratory Systems</td>
+           <td class="px-6 py-4"><span class="stock-badge badge-limited">🟡 Limited</span></td>
+           <td class="px-6 py-4 text-gray-600">3 Units</td>
+           <td class="px-6 py-4">
+            <div class="w-32 stock-bar">
+             <div class="stock-bar-fill" style="width: 50%"></div>
+            </div></td>
+          </tr>
+          <tr class="border-b border-medical-border hover:bg-medical-light transition-colors">
+           <td class="px-6 py-4 font-medium text-gray-800">Immunology System</td>
+           <td class="px-6 py-4 text-gray-600">Laboratory Systems</td>
+           <td class="px-6 py-4"><span class="stock-badge badge-on-order">🔵 On Order</span></td>
+           <td class="px-6 py-4 text-gray-600">Arriving 3/15</td>
+           <td class="px-6 py-4">
+            <div class="w-32 stock-bar">
+             <div class="stock-bar-fill" style="width: 30%"></div>
+            </div></td>
+          </tr>
+          <tr class="border-b border-medical-border hover:bg-medical-light transition-colors">
+           <td class="px-6 py-4 font-medium text-gray-800">PCR System</td>
+           <td class="px-6 py-4 text-gray-600">Laboratory Systems</td>
+           <td class="px-6 py-4"><span class="stock-badge badge-in-stock">🟢 In Stock</span></td>
+           <td class="px-6 py-4 text-gray-600">2 Units</td>
+           <td class="px-6 py-4">
+            <div class="w-32 stock-bar">
+             <div class="stock-bar-fill" style="width: 70%"></div>
+            </div></td>
+          </tr>
+          <tr class="border-b border-medical-border hover:bg-medical-light transition-colors">
+           <td class="px-6 py-4 font-medium text-gray-800">Hematology Reagents</td>
+           <td class="px-6 py-4 text-gray-600">Reagents &amp; Consumables</td>
+           <td class="px-6 py-4"><span class="stock-badge badge-in-stock">🟢 In Stock</span></td>
+           <td class="px-6 py-4 text-gray-600">250 Kits</td>
+           <td class="px-6 py-4">
+            <div class="w-32 stock-bar">
+             <div class="stock-bar-fill" style="width: 90%"></div>
+            </div></td>
+          </tr>
+          <tr class="border-b border-medical-border hover:bg-medical-light transition-colors">
+           <td class="px-6 py-4 font-medium text-gray-800">Chemistry Reagents</td>
+           <td class="px-6 py-4 text-gray-600">Reagents &amp; Consumables</td>
+           <td class="px-6 py-4"><span class="stock-badge badge-limited">🟡 Limited</span></td>
+           <td class="px-6 py-4 text-gray-600">180 Kits</td>
+           <td class="px-6 py-4">
+            <div class="w-32 stock-bar">
+             <div class="stock-bar-fill" style="width: 55%"></div>
+            </div></td>
+          </tr>
+          <tr class="hover:bg-medical-light transition-colors">
+           <td class="px-6 py-4 font-medium text-gray-800">Sample Collection Tubes</td>
+           <td class="px-6 py-4 text-gray-600">Reagents &amp; Consumables</td>
+           <td class="px-6 py-4"><span class="stock-badge badge-in-stock">🟢 In Stock</span></td>
+           <td class="px-6 py-4 text-gray-600">5000 Units</td>
+           <td class="px-6 py-4">
+            <div class="w-32 stock-bar">
+             <div class="stock-bar-fill" style="width: 95%"></div>
+            </div></td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div><!-- Upcoming Arrivals -->
+      <div class="mt-16 section-fade delay-300">
+       <h2 class="text-2xl font-bold text-medical-blue mb-8">Upcoming Stock Arrivals</h2>
+       <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-medical-light rounded-xl border border-medical-border p-6">
+         <div class="flex items-start justify-between">
+          <div>
+           <h3 class="font-semibold text-medical-blue text-lg mb-2">Immunology Systems</h3>
+           <p class="text-gray-600 mb-3">10 units arriving March 15, 2024</p>
+           <p class="text-sm text-medical-teal font-medium">Advanced immunoassay platforms ready for deployment</p>
+          </div><span class="text-3xl text-medical-teal/20">📦</span>
+         </div>
+        </div>
+        <div class="bg-medical-light rounded-xl border border-medical-border p-6">
+         <div class="flex items-start justify-between">
+          <div>
+           <h3 class="font-semibold text-medical-blue text-lg mb-2">PCR Test Kits</h3>
+           <p class="text-gray-600 mb-3">500 kits arriving March 20, 2024</p>
+           <p class="text-sm text-medical-teal font-medium">Molecular diagnostic kits for infectious disease detection</p>
+          </div><span class="text-3xl text-medical-teal/20">🧬</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section>
+   </div><!-- QUOTE REQUEST PAGE -->
+   <div id="quote-page" class="page-content">
+    <section class="min-h-screen pt-32 pb-24 bg-white">
+     <div class="max-w-3xl mx-auto px-6 lg:px-8">
+      <div class="mb-12 section-fade">
+       <h1 class="text-4xl lg:text-5xl font-bold text-medical-blue mb-4">Request a Quote</h1>
+       <p class="text-xl text-gray-600">Get customized pricing for your laboratory needs.</p>
+      </div>
+      <div class="bg-medical-light rounded-2xl border border-medical-border p-8 section-fade delay-100">
+       <form id="quote-form" class="space-y-6">
+        <div class="grid sm:grid-cols-2 gap-6">
+         <div>
+          <label for="quote-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label> <input type="text" id="quote-name" required class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="John Smith">
+         </div>
+         <div>
+          <label for="quote-lab" class="block text-sm font-medium text-gray-700 mb-2">Laboratory Name *</label> <input type="text" id="quote-lab" required class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="Your Laboratory">
+         </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-6">
+         <div>
+          <label for="quote-position" class="block text-sm font-medium text-gray-700 mb-2">Position/Title</label> <input type="text" id="quote-position" class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="Lab Director">
+         </div>
+         <div>
+          <label for="quote-email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label> <input type="email" id="quote-email" required class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="you@laboratory.com">
+         </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-6">
+         <div>
+          <label for="quote-phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label> <input type="tel" id="quote-phone" class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="+1 234 567 890">
+         </div>
+         <div>
+          <label for="quote-product" class="block text-sm font-medium text-gray-700 mb-2">Product Type *</label> <select id="quote-product" required class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors bg-white"> <option value="">Select a product...</option> <option value="hematology">Hematology Analyzer</option> <option value="biochemistry">Biochemistry Analyzer</option> <option value="immunology">Immunology System</option> <option value="pcr">PCR System</option> <option value="electrolyte">Electrolyte Analyzer</option> <option value="blood-gas">Blood Gas Analyzer</option> <option value="hematology-reagents">Hematology Reagents</option> <option value="chemistry-reagents">Chemistry Reagents</option> <option value="pcr-kits">PCR Test Kits</option> <option value="other">Other / Multiple Products</option> </select>
+         </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-6">
+         <div>
+          <label for="quote-quantity" class="block text-sm font-medium text-gray-700 mb-2">Quantity Needed *</label> <input type="number" id="quote-quantity" min="1" required class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="1">
+         </div>
+         <div>
+          <label for="quote-volume" class="block text-sm font-medium text-gray-700 mb-2">Monthly Test Volume</label> <input type="number" id="quote-volume" class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="10,000">
+         </div>
+        </div>
+        <div>
+         <label for="quote-message" class="block text-sm font-medium text-gray-700 mb-2">Additional Requirements</label> <textarea id="quote-message" rows="4" class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors resize-none" placeholder="Tell us about your specific laboratory needs..."></textarea>
+        </div>
+        <div class="flex items-center gap-3">
+         <input type="checkbox" id="quote-contract" class="w-4 h-4 rounded border-medical-border accent-medical-teal"> <label for="quote-contract" class="text-sm text-gray-600">Request long-term supply contract</label>
+        </div><button type="submit" class="w-full btn-primary text-white py-4 rounded-lg font-semibold">Send Quote Request</button>
+       </form>
+       <div id="quote-success" class="hidden text-center py-8">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+         <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-medical-blue mb-2">Quote Request Submitted!</h3>
+        <p class="text-gray-600">We'll review your request and contact you within 24 hours with a customized quote.</p>
+       </div>
+      </div>
+     </div>
+    </section>
+   </div><!-- PARTNERSHIP PAGE -->
+   <div id="partnership-page" class="page-content">
+    <section class="min-h-screen pt-32 pb-24 bg-white">
+     <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="mb-16 section-fade">
+       <h1 class="text-4xl lg:text-5xl font-bold text-medical-blue mb-4">Supply &amp; Partnership Solutions</h1>
+       <p class="text-xl text-gray-600">Long-term laboratory partnerships built on reliability and trust.</p>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+       <div class="section-fade">
+        <div class="space-y-6">
+         <div class="flex gap-4">
+          <div class="w-12 h-12 bg-medical-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+           <svg class="w-6 h-6 text-medical-teal" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+          <div>
+           <h3 class="text-lg font-semibold text-medical-blue mb-2">Continuous Reagent Supply</h3>
+           <p class="text-gray-600">Never face laboratory downtime with our reliable supply chain and scheduled deliveries.</p>
+          </div>
+         </div>
+         <div class="flex gap-4">
+          <div class="w-12 h-12 bg-medical-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+           <svg class="w-6 h-6 text-medical-teal" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+          <div>
+           <h3 class="text-lg font-semibold text-medical-blue mb-2">Long-Term Contracts</h3>
+           <p class="text-gray-600">Customized partnership agreements with flexible terms and priority support.</p>
+          </div>
+         </div>
+         <div class="flex gap-4">
+          <div class="w-12 h-12 bg-medical-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+           <svg class="w-6 h-6 text-medical-teal" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+          <div>
+           <h3 class="text-lg font-semibold text-medical-blue mb-2">Volume-Based Pricing</h3>
+           <p class="text-gray-600">Significant discounts and favorable pricing for committed long-term partnerships.</p>
+          </div>
+         </div>
+         <div class="flex gap-4">
+          <div class="w-12 h-12 bg-medical-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+           <svg class="w-6 h-6 text-medical-teal" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+          <div>
+           <h3 class="text-lg font-semibold text-medical-blue mb-2">Fast &amp; Reliable Delivery</h3>
+           <p class="text-gray-600">Expedited logistics and real-time tracking for all shipments.</p>
+          </div>
+         </div>
+         <div class="flex gap-4">
+          <div class="w-12 h-12 bg-medical-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+           <svg class="w-6 h-6 text-medical-teal" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+          <div>
+           <h3 class="text-lg font-semibold text-medical-blue mb-2">Technical Support &amp; Training</h3>
+           <p class="text-gray-600">Dedicated support team with 24/7 emergency restocking services.</p>
+          </div>
+         </div>
+         <div class="flex gap-4">
+          <div class="w-12 h-12 bg-medical-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+           <svg class="w-6 h-6 text-medical-teal" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+          <div>
+           <h3 class="text-lg font-semibold text-medical-blue mb-2">Secure Supply Chain</h3>
+           <p class="text-gray-600">Full traceability, regulatory compliance, and quality assurance at every step.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="section-fade delay-200">
+        <div class="bg-medical-light rounded-2xl border border-medical-border p-8">
+         <h3 class="text-2xl font-bold text-medical-blue mb-6">Why Partner With Us?</h3>
+         <div class="space-y-6">
+          <div class="p-4 bg-white rounded-lg border border-medical-border">
+           <p class="text-sm font-semibold text-medical-blue mb-2">15+ Years Experience</p>
+           <p class="text-sm text-gray-600">Established relationships with international manufacturers and proven track record.</p>
+          </div>
+          <div class="p-4 bg-white rounded-lg border border-medical-border">
+           <p class="text-sm font-semibold text-medical-blue mb-2">200+ Satisfied Clients</p>
+           <p class="text-sm text-gray-600">Hospitals, clinics, and private laboratories trust us for their critical needs.</p>
+          </div>
+          <div class="p-4 bg-white rounded-lg border border-medical-border">
+           <p class="text-sm font-semibold text-medical-blue mb-2">Certified &amp; Compliant</p>
+           <p class="text-sm text-gray-600">All products meet international standards and regulatory requirements.</p>
+          </div>
+          <div class="p-4 bg-white rounded-lg border border-medical-border">
+           <p class="text-sm font-semibold text-medical-blue mb-2">Competitive Pricing</p>
+           <p class="text-sm text-gray-600">Volume discounts and flexible payment terms for long-term commitments.</p>
+          </div>
+         </div><a onclick="showPage('quote')" class="w-full btn-primary text-white py-3 rounded-lg font-semibold mt-8 block text-center cursor-pointer">Start a Partnership Today</a>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section>
+   </div><!-- CONTACT PAGE -->
+   <div id="contact-page" class="page-content">
+    <section class="min-h-screen pt-32 pb-24 bg-medical-light">
+     <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="mb-16 section-fade">
+       <h1 class="text-4xl lg:text-5xl font-bold text-medical-blue mb-4">Get in Touch</h1>
+       <p class="text-xl text-gray-600">Our team is ready to assist with your laboratory needs.</p>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-12">
+       <!-- Contact Form -->
+       <div class="bg-white rounded-2xl p-8 border border-medical-border section-fade">
+        <form id="contact-form" class="space-y-6">
+         <div class="grid sm:grid-cols-2 gap-6">
+          <div>
+           <label for="contact-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label> <input type="text" id="contact-name" required class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="Your name">
+          </div>
+          <div>
+           <label for="contact-lab" class="block text-sm font-medium text-gray-700 mb-2">Laboratory Name</label> <input type="text" id="contact-lab" class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="Your laboratory">
+          </div>
+         </div>
+         <div class="grid sm:grid-cols-2 gap-6">
+          <div>
+           <label for="contact-email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label> <input type="email" id="contact-email" required class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="you@example.com">
+          </div>
+          <div>
+           <label for="contact-phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label> <input type="tel" id="contact-phone" class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors" placeholder="+1 234 567 890">
+          </div>
+         </div>
+         <div>
+          <label for="contact-message" class="block text-sm font-medium text-gray-700 mb-2">Message *</label> <textarea id="contact-message" rows="4" required class="w-full px-4 py-3 border border-medical-border rounded-lg focus:ring-2 focus:ring-medical-teal focus:border-medical-teal transition-colors resize-none" placeholder="How can we help you?"></textarea>
+         </div><button type="submit" class="w-full btn-primary text-white py-4 rounded-lg font-semibold">Send Message</button>
+        </form>
+        <div id="contact-success" class="hidden text-center py-8">
+         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+         </div>
+         <h3 class="text-xl font-semibold text-medical-blue mb-2">Message Sent!</h3>
+         <p class="text-gray-600">We'll get back to you within 24 hours.</p>
+        </div>
+       </div><!-- Contact Info -->
+       <div class="section-fade delay-200">
+        <div class="bg-white rounded-2xl p-8 border border-medical-border mb-6">
+         <h3 class="text-xl font-semibold text-medical-blue mb-6">Contact Information</h3>
+         <div class="space-y-6">
+          <div class="flex items-start gap-4">
+           <div class="w-12 h-12 bg-medical-light rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-medical-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+           </div>
+           <div>
+            <p class="text-sm text-gray-500 mb-1">Phone</p>
+            <p id="contact-phone-display" class="text-gray-800 font-medium">+1 234 567 890</p>
+           </div>
+          </div>
+          <div class="flex items-start gap-4">
+           <div class="w-12 h-12 bg-medical-light rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-medical-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+           </div>
+           <div>
+            <p class="text-sm text-gray-500 mb-1">Email</p>
+            <p id="contact-email-display" class="text-gray-800 font-medium">info@medlabsolutions.com</p>
+           </div>
+          </div>
+          <div class="flex items-start gap-4">
+           <div class="w-12 h-12 bg-medical-light rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-medical-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+           </div>
+           <div>
+            <p class="text-sm text-gray-500 mb-1">Address</p>
+            <p class="text-gray-800 font-medium">Medical City District<br>
+              Business Tower, Floor 12</p>
+           </div>
+          </div>
+         </div>
+        </div><!-- Business Hours -->
+        <div class="bg-white rounded-2xl p-8 border border-medical-border">
+         <h3 class="text-lg font-semibold text-medical-blue mb-4">Business Hours</h3>
+         <div class="space-y-3">
+          <div class="flex justify-between">
+           <span class="text-gray-600">Monday - Friday</span> <span class="font-medium text-gray-800">8:00 AM - 6:00 PM</span>
+          </div>
+          <div class="flex justify-between">
+           <span class="text-gray-600">Saturday</span> <span class="font-medium text-gray-800">9:00 AM - 2:00 PM</span>
+          </div>
+          <div class="flex justify-between">
+           <span class="text-gray-600">Emergency Support</span> <span class="font-medium text-medical-teal">24/7 Available</span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section>
+   </div><!-- Footer -->
+   <footer class="bg-medical-blue text-white py-16">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+      <div class="lg:col-span-2">
+       <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+         </svg>
+        </div><span id="footer-company-name" class="text-xl font-semibold">MedLab Solutions</span>
+       </div>
+       <p class="text-white/70 mb-6">Your trusted partner for laboratory equipment and diagnostic solutions since 2009.</p>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-4">Quick Links</h4>
+       <ul class="space-y-2">
+        <li><a onclick="showPage('home')" class="text-white/70 hover:text-white transition-colors cursor-pointer text-sm">Home</a></li>
+        <li><a onclick="showPage('products')" class="text-white/70 hover:text-white transition-colors cursor-pointer text-sm">Products</a></li>
+        <li><a onclick="showPage('inventory')" class="text-white/70 hover:text-white transition-colors cursor-pointer text-sm">Inventory</a></li>
+        <li><a onclick="showPage('quote')" class="text-white/70 hover:text-white transition-colors cursor-pointer text-sm">Request Quote</a></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold mb-4">Services</h4>
+       <ul class="space-y-2">
+        <li><a onclick="showPage('partnership')" class="text-white/70 hover:text-white transition-colors cursor-pointer text-sm">Partnership</a></li>
+        <li><a onclick="showPage('contact')" class="text-white/70 hover:text-white transition-colors cursor-pointer text-sm">Contact Us</a></li>
+        <li><a href="#" class="text-white/70 hover:text-white transition-colors text-sm">Terms of Service</a></li>
+        <li><a href="#" class="text-white/70 hover:text-white transition-colors text-sm">Privacy Policy</a></li>
+       </ul>
+      </div>
+     </div>
+     <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-white/50 text-sm">© 2024 MedLab Solutions. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+       <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+        </svg></a>
+      </div>
+     </div>
+    </div>
+   </footer><!-- WhatsApp Floating Button --> <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" class="floating-btn bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600">
+    <svg class="w-7 h-7 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg></a> <!-- Quick Quote Floating Button --> <a onclick="showPage('quote')" class="floating-btn bottom-24 right-6 w-14 h-14 bg-medical-teal rounded-full flex items-center justify-center shadow-lg hover:bg-medical-blue cursor-pointer">
+    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg></a>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      company_name: 'MedLab Solutions',
+      hero_headline: 'Advanced Laboratory Equipment & Diagnostic Solutions',
+      hero_subtext: 'Reliable medical laboratory systems, high-quality reagents, and comprehensive support for hospitals, clinics, and private laboratories across the region.',
+      contact_phone: '+1 234 567 890',
+      contact_email: 'info@medlabsolutions.com',
+      machine_category_title: 'Laboratory Systems',
+      reagent_category_title: 'Reagents & Consumables'
+    };
+
+    // Initialize Elements SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          document.getElementById('nav-company-name').textContent = config.company_name || defaultConfig.company_name;
+          document.getElementById('footer-company-name').textContent = config.company_name || defaultConfig.company_name;
+          document.getElementById('hero-headline').textContent = config.hero_headline || defaultConfig.hero_headline;
+          document.getElementById('hero-subtext').textContent = config.hero_subtext || defaultConfig.hero_subtext;
+          document.getElementById('contact-phone-display').textContent = config.contact_phone || defaultConfig.contact_phone;
+          document.getElementById('contact-email-display').textContent = config.contact_email || defaultConfig.contact_email;
+          document.getElementById('machine-category-title').textContent = config.machine_category_title || defaultConfig.machine_category_title;
+          document.getElementById('reagent-category-title').textContent = config.reagent_category_title || defaultConfig.reagent_category_title;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['company_name', config.company_name || defaultConfig.company_name],
+          ['hero_headline', config.hero_headline || defaultConfig.hero_headline],
+          ['hero_subtext', config.hero_subtext || defaultConfig.hero_subtext],
+          ['contact_phone', config.contact_phone || defaultConfig.contact_phone],
+          ['contact_email', config.contact_email || defaultConfig.contact_email],
+          ['machine_category_title', config.machine_category_title || defaultConfig.machine_category_title],
+          ['reagent_category_title', config.reagent_category_title || defaultConfig.reagent_category_title]
+        ])
+      });
+    }
+
+    // Page navigation
+    function showPage(pageId) {
+      const pages = document.querySelectorAll('.page-content');
+      pages.forEach(page => page.classList.remove('active'));
+      document.getElementById(pageId + '-page').classList.add('active');
+      window.scrollTo(0, 0);
+      document.getElementById('mobile-menu').classList.add('hidden');
+    }
+
+    // Language system
+    let currentLanguage = 'en';
+    
+    function switchLanguage(lang) {
+      currentLanguage = lang;
+      document.getElementById('lang-en-btn').className = lang === 'en' ? 'px-3 py-1 rounded text-sm font-medium bg-white text-medical-blue border border-medical-border transition-all' : 'px-3 py-1 rounded text-sm font-medium text-gray-600 hover:text-medical-blue transition-all';
+      document.getElementById('lang-fr-btn').className = lang === 'fr' ? 'px-3 py-1 rounded text-sm font-medium bg-white text-medical-blue border border-medical-border transition-all' : 'px-3 py-1 rounded text-sm font-medium text-gray-600 hover:text-medical-blue transition-all';
+    }
+
+    const productDetails = {
+      hematology: {
+        en: {
+          title: 'Hematology Analyzer',
+          fullDescription: 'Complete blood count systems with 3-part and 5-part differential capabilities.',
+          specs: ['Throughput: 60 samples/hour', '5 Units Available', 'Fully automated operation'],
+          keyFeatures: ['CBC with 18 parameters', 'Automatic sample loader', 'Real-time data archiving', '24/7 operation capability'],
+          specifications: {
+            'Sample Type': 'EDTA whole blood',
+            'Sample Volume': '25 µL',
+            'Processing Time': '20 seconds',
+            'Warranty': '24 months'
+          }
+        },
+        fr: {
+          title: 'Analyseur d\'Hématologie',
+          fullDescription: 'Systèmes de numération complète avec formule à 3 et 5 éléments.',
+          specs: ['Débit: 60 échantillons/heure', '5 Unités Disponibles', 'Fonctionnement entièrement automatisé'],
+          keyFeatures: ['NFS avec 18 paramètres', 'Chargeur automatique', 'Archivage de données en temps réel', 'Capacité d\'exploitation 24h/24'],
+          specifications: {
+            'Type d\'échantillon': 'Sang total EDTA',
+            'Volume d\'échantillon': '25 µL',
+            'Temps de traitement': '20 secondes',
+            'Garantie': '24 mois'
+          }
+        }
+      },
+      biochemistry: {
+        en: {
+          title: 'Biochemistry Analyzer',
+          fullDescription: 'Fully automated clinical chemistry analyzer for metabolic panels.',
+          specs: ['Throughput: 400 tests/hour', '3 Units Available', 'Multi-wavelength detection'],
+          keyFeatures: ['400 tests/hour throughput', 'Multi-wavelength photometer', 'Temperature-controlled sample disc', 'Automated QC verification'],
+          specifications: {
+            'Test Types': 'Photometry, Ion-selective',
+            'Wavelengths': '340-650 nm',
+            'Sample Capacity': '100 positions',
+            'Reagent Capacity': '50 bottles'
+          }
+        },
+        fr: {
+          title: 'Analyseur de Chimie Clinique',
+          fullDescription: 'Analyseur de chimie clinique entièrement automatisé pour les bilans métaboliques.',
+          specs: ['Débit: 400 tests/heure', '3 Unités Disponibles', 'Détection multi-longueurs d\'onde'],
+          keyFeatures: ['Débit de 400 tests/heure', 'Photomètre multi-longueurs d\'onde', 'Disque d\'échantillons régulé', 'Vérification QC automatisée'],
+          specifications: {
+            'Types de tests': 'Photométrie, Électrode sélective',
+            'Longueurs d\'onde': '340-650 nm',
+            'Capacité d\'échantillons': '100 positions',
+            'Capacité de réactifs': '50 bouteilles'
+          }
+        }
+      },
+      immunology: {
+        en: {
+          title: 'Immunology System',
+          fullDescription: 'Advanced immunoassay platform for hormone and marker testing.',
+          specs: ['50 tests/hour capacity', 'Arriving March 15', 'Full automation included'],
+          keyFeatures: ['High sensitivity detection', 'Multiple assay protocols', 'Rapid processing', 'Built-in QC'],
+          specifications: {
+            'Assay Types': 'Hormone, Tumor markers',
+            'Sample Volume': '5-100 µL',
+            'Incubation Time': '15-45 minutes',
+            'Throughput': '50 tests/hour'
+          }
+        },
+        fr: {
+          title: 'Système d\'Immunologie',
+          fullDescription: 'Plateforme d\'immunoessai avancée pour le test d\'hormones et de marqueurs.',
+          specs: ['Capacité de 50 tests/heure', 'Arrivée 15 mars', 'Automatisation complète'],
+          keyFeatures: ['Détection haute sensibilité', 'Multiples protocoles d\'essai', 'Traitement rapide', 'QC intégré'],
+          specifications: {
+            'Types d\'essais': 'Hormone, Marqueurs tumoraux',
+            'Volume d\'échantillon': '5-100 µL',
+            'Temps d\'incubation': '15-45 minutes',
+            'Débit': '50 tests/heure'
+          }
+        }
+      }
+    };
+
+    function openProductDetails(productId) {
+      const product = productDetails[productId][currentLanguage];
+      const modal = document.createElement('div');
+      modal.id = 'product-modal';
+      modal.className = 'fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto';
+      modal.innerHTML = `
+        <div class="bg-white rounded-2xl max-w-2xl w-full my-8">
+          <div class="flex items-center justify-between p-6 border-b border-medical-border sticky top-0 bg-white">
+            <h2 class="text-2xl font-bold text-medical-blue">${product.title}</h2>
+            <button onclick="this.closest('#product-modal').remove()" class="p-2 hover:bg-medical-light rounded-lg transition-colors">
+              <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="p-6 space-y-6">
+            <div>
+              <p class="text-gray-700 leading-relaxed">${product.fullDescription}</p>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-medical-blue mb-3">${currentLanguage === 'en' ? 'Key Features' : 'Caractéristiques principales'}</h3>
+              <ul class="space-y-2">
+                ${product.keyFeatures.map(feature => `<li class="flex items-start gap-2"><span class="text-medical-teal font-bold">✓</span><span class="text-gray-700">${feature}</span></li>`).join('')}
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-medical-blue mb-3">${currentLanguage === 'en' ? 'Technical Specifications' : 'Spécifications techniques'}</h3>
+              <div class="grid grid-cols-2 gap-4">
+                ${Object.entries(product.specifications).map(([key, value]) => `
+                  <div class="bg-medical-light p-3 rounded-lg">
+                    <p class="text-sm text-gray-600">${key}</p>
+                    <p class="font-medium text-medical-blue">${value}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <div class="flex gap-3 pt-4">
+              <button onclick="this.closest('#product-modal').remove()" class="flex-1 py-3 border-2 border-medical-blue text-medical-blue rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors cursor-pointer">${currentLanguage === 'en' ? 'Close' : 'Fermer'}</button>
+              <button onclick="showPage('quote'); this.closest('#product-modal').remove()" class="flex-1 py-3 bg-medical-teal text-white rounded-lg font-medium hover:bg-medical-blue transition-colors cursor-pointer">${currentLanguage === 'en' ? 'Request Quote' : 'Demander un Devis'}</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Navbar scroll effect
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 100) {
+        nav.classList.add('shadow-md');
+      } else {
+        nav.classList.remove('shadow-md');
+      }
+    });
+
+    // Form submissions
+    document.getElementById('quote-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('quote-form').classList.add('hidden');
+      document.getElementById('quote-success').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('quote-form').reset();
+        document.getElementById('quote-form').classList.remove('hidden');
+        document.getElementById('quote-success').classList.add('hidden');
+      }, 5000);
+    });
+
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('contact-form').classList.add('hidden');
+      document.getElementById('contact-success').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('contact-form').reset();
+        document.getElementById('contact-form').classList.remove('hidden');
+        document.getElementById('contact-success').classList.add('hidden');
+      }, 5000);
+    });
+
+    // Intersection observer for scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.section-fade').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+      observer.observe(el);
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d50dae051d8ba9b',t:'MTc3MjI5MTQ5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
